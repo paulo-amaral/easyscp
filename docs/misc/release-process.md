@@ -29,21 +29,14 @@ trusted publishing, see below), and pushes to Chocolatey when the
 
 After the run, `git pull` locally to fetch the bump commit.
 
-## 3. Homebrew tap
+## 3. macOS installer
 
-The macOS formula lives in <https://github.com/paulo-amaral/homebrew-easyscp>.
-After the release exists, update `Formula/easyscp.rb`:
+The macOS path is handled by `install.sh`.
 
-1. Bump `version`.
-2. Recompute both sha256 checksums from the release tarballs:
-
-```sh
-curl -sSLf -O https://github.com/paulo-amaral/easyscp/releases/download/vX.Y.Z/easyscp-vX.Y.Z-aarch64-apple-darwin.tar.gz
-curl -sSLf -O https://github.com/paulo-amaral/easyscp/releases/download/vX.Y.Z/easyscp-vX.Y.Z-x86_64-apple-darwin.tar.gz
-shasum -a 256 easyscp-vX.Y.Z-*.tar.gz
-```
-
-3. Commit and push the tap repo.
+- If MacPorts is available, the installer uses `port install easyscp` or
+  `port upgrade easyscp`.
+- Otherwise, it builds with Cargo without SMB support, installs the binary at
+  `/opt/easyscp/bin/easyscp`, and links it at `/opt/local/bin/easyscp`.
 
 ## Secrets and external setup
 

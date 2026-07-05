@@ -24,7 +24,7 @@ Linux、FreeBSD 和 macOS：
 curl --proto '=https' --tlsv1.2 -sSLf https://raw.githubusercontent.com/paulo-amaral/easyscp/main/install.sh | sh
 ```
 
-在 macOS 上，安装程序通过 Cargo 从源码构建 EasySCP（该构建禁用 SMB 支持，因为 macOS 系统本身不提供 libsmbclient）。
+在 macOS 上，安装程序会优先使用 MacPorts。如果没有 MacPorts，则通过 Cargo 构建 EasySCP，并将二进制文件安装到 `/opt/easyscp/bin/easyscp`，同时在 `/opt/local/bin/easyscp` 创建链接。Cargo fallback 会禁用 SMB 支持，因为 macOS 系统本身不提供 `libsmbclient`。
 
 Windows PowerShell：
 

@@ -204,6 +204,16 @@ install_on_arch_linux() {
     $pkg -S easyscp
 }
 
+install_with_port() {
+    info "Installing ${GREEN}easyscp${NO_COLOR} with MacPorts"
+    sudo="$(elevate_priv_ex /opt/local/bin)"
+    if port installed easyscp 1>/dev/null 2>&1; then
+        $sudo port upgrade easyscp
+    else
+        $sudo port install easyscp
+    fi
+}
+
 install_on_debian() {
     local pkg_manager
     if has apt; then
@@ -273,7 +283,11 @@ install_on_linux() {
 }
 
 install_on_macos() {
-    try_with_cargo "easyscp is not distributed as a macOS package at the moment" "macos"
+    if has port; then
+        install_with_port
+    else
+        try_with_cargo "MacPorts and Cargo are not available on this system" "macos"
+    fi
 }
 
 # -- cargo installation
@@ -343,6 +357,24 @@ install_cargo() {
 
 }
 
+install_macos_opt_binary() {
+    src="$HOME/.cargo/bin/easyscp"
+    dst="/opt/easyscp/bin/easyscp"
+    link="/opt/local/bin/easyscp"
+
+    if [ ! -x "$src" ]; then
+        error "Cargo finished, but ${src} was not found"
+        return 1
+    fi
+
+    sudo="$(elevate_priv_ex /opt)"
+    $sudo mkdir -p /opt/easyscp/bin /opt/local/bin
+    $sudo install -m 0755 "$src" "$dst"
+    $sudo ln -sf "$dst" "$link"
+    info "Installed ${GREEN}easyscp${NO_COLOR} to ${dst}"
+    info "Linked ${GREEN}easyscp${NO_COLOR} at ${link}"
+}
+
 try_with_cargo() {
     err="$1"
     platform="$2"
@@ -362,9 +394,8 @@ try_with_cargo() {
             ;;
 
             "macos")
-                # no libsmbclient on stock macOS: build without SMB, like the
-                # official x86_64 macOS binary
                 cargo install --locked --no-default-features --features keyring easyscp
+                install_macos_opt_binary
             ;;
 
             *)

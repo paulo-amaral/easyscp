@@ -11,9 +11,8 @@ Install EasySCP with the shell installer:
 curl --proto '=https' --tlsv1.2 -sSLf https://raw.githubusercontent.com/paulo-amaral/easyscp/main/install.sh | sh
 ```
 
-On macOS, the installer uses [MacPorts](https://www.macports.org/) when
-available. If MacPorts is not installed, it builds EasySCP from source with
-Cargo.
+On macOS, the installer builds EasySCP from source with Cargo. SMB support is
+disabled in this build, since stock macOS does not ship libsmbclient.
 
 ## Windows
 

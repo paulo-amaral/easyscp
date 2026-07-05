@@ -204,19 +204,6 @@ install_on_arch_linux() {
     $pkg -S easyscp
 }
 
-install_with_port() {
-    info "Installing easyscp with MacPorts"
-    elevate_priv
-    if port installed easyscp 1>/dev/null 2>&1; then
-        info "Upgrading ${GREEN}easyscp${NO_COLOR}…"
-        $sudo port selfupdate
-        $sudo port upgrade easyscp
-    else
-        info "Installing ${GREEN}easyscp${NO_COLOR}…"
-        $sudo port install easyscp
-    fi
-}
-
 install_on_debian() {
     local pkg_manager
     if has apt; then
@@ -286,11 +273,7 @@ install_on_linux() {
 }
 
 install_on_macos() {
-    if has port; then
-        install_with_port
-    else
-        try_with_cargo "MacPorts is missing on your system; please install it from <https://www.macports.org/>" "macos"
-    fi
+    try_with_cargo "easyscp is not distributed as a macOS package at the moment" "macos"
 }
 
 # -- cargo installation
@@ -376,6 +359,12 @@ try_with_cargo() {
             "linux")
                 install_linux_cargo_deps
                 cargo install --locked easyscp
+            ;;
+
+            "macos")
+                # no libsmbclient on stock macOS: build without SMB, like the
+                # official x86_64 macOS binary
+                cargo install --locked --no-default-features --features keyring easyscp
             ;;
 
             *)

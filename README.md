@@ -6,6 +6,10 @@ Linux, macOS, BSD and Windows.
 It supports SCP, SFTP, FTP/FTPS, SMB/CIFS, S3, WebDAV and Kubernetes file
 operations from a terminal interface.
 
+## Screenshot
+
+![EasySCP](image.png)
+
 ## Features
 
 - Dual-pane local and remote file browsing

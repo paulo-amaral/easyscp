@@ -35,7 +35,12 @@ jobs:
         run: sudo apt update && sudo apt install -y libdbus-1-dev libsmbclient-dev
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
-        run: sudo port install pkgconfig samba4
+        run: |
+          brew update
+          brew install \
+          pkg-config \
+          samba
+          brew link --force samba
       - name: Install nightly toolchain
         if: runner.os == 'Linux'
         uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable

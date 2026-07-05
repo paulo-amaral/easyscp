@@ -1,6 +1,0 @@
-dist
-node_modules
-.astro
-package-lock.json
-public/install.sh
-public/install.ps1

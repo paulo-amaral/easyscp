@@ -32,3 +32,6 @@ dist/build/macos/openssl/
 # brainstorming visual companion
 .superpowers/
 docs/*/book/
+
+# Local-only site sources (kept out of the repo)
+site/

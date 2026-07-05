@@ -22,9 +22,6 @@ sedi "s/\\\$Version = \"[0-9][0-9A-Za-z.\\-]*\"/\\\$Version = \"$VERSION\"/" "$R
 # README.md — version + release date
 sedi "s/Current version: [0-9][0-9A-Za-z.\\-]* [0-9]{4}-[0-9]{2}-[0-9]{2}/Current version: $VERSION $DATE/" "$ROOT/README.md"
 
-# site: version constant displayed on the website
-sedi "s/^export const VERSION = \"[0-9][0-9A-Za-z.\\-]*\";/export const VERSION = \"$VERSION\";/m" "$ROOT/site/src/consts.ts"
-
 # chocolatey nuspec
 sedi "s#<version>[0-9][0-9A-Za-z.\\-]*</version>#<version>$VERSION</version>#" "$ROOT/dist/chocolatey/easyscp.nuspec"
 

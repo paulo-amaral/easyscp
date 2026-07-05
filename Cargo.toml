@@ -1,0 +1,146 @@
+[package]
+name = "easyscp"
+version = "1.1.1"
+edition = "2024"
+description = "Terminal SCP/SFTP/FTP/SMB file transfer client and dual-pane file manager"
+license = "MIT"
+repository = "https://github.com/paulo-amaral/easyscp"
+categories = ["command-line-utilities"]
+homepage = "https://paulo-amaral.github.io/easyscp"
+include = ["/src/**/*", "/build.rs", "/LICENSE", "/README.md", "/CHANGELOG.md"]
+keywords = ["scp", "sftp", "ftp", "smb", "tui"]
+readme = "README.md"
+rust-version = "1.89.0"
+
+[package.metadata.rpm]
+package = "easyscp"
+
+[package.metadata.rpm.cargo]
+buildflags = ["--release"]
+
+[package.metadata.rpm.targets]
+easyscp = { path = "/usr/bin/easyscp" }
+
+[package.metadata.deb]
+maintainer = "Paulo Amaral"
+copyright = "2026, Paulo Amaral"
+extended-description-file = "docs/misc/README.deb.txt"
+
+[features]
+default = ["keyring", "smb"]
+github-actions = []
+isolated-tests = []
+keyring = []
+smb = ["dep:remotefs-smb"]
+smb-vendored = ["remotefs-smb/vendored"]
+
+[dependencies]
+aes = "0.9"
+aes-gcm = "0.10"
+argh = "0.1"
+base64 = "0.22"
+bitflags = "2"
+bytesize = "2"
+cbc = { version = "0.2", features = ["alloc"] }
+chrono = "0.4"
+content_inspector = "0.2"
+dirs = "6"
+edit = "0.1"
+filetime = "0.2"
+keyring-core = "1"
+lazy-regex = "3"
+log = "0.4"
+md-5 = "0.11"
+notify = "8"
+notify-rust = { version = "4", default-features = false, features = ["d"] }
+nucleo = "0.5"
+open = "5"
+rand = "0.10"
+regex = "1"
+remotefs = "0.3"
+remotefs-aws-s3 = "0.4"
+remotefs-kube = "0.4"
+remotefs-smb = { version = "0.3", optional = true }
+remotefs-ssh = { version = "0.8", default-features = false, features = [
+  "russh",
+] }
+remotefs-webdav = "0.2"
+rpassword = "7"
+self_update = { version = "0.42", default-features = false, features = [
+  "archive-tar",
+  "archive-zip",
+  "compression-flate2",
+  "compression-zip-deflate",
+  "rustls",
+] }
+semver = "1"
+serde = { version = "1", features = ["derive"] }
+shellexpand = "3"
+simplelog = "0.12"
+ssh2-config = "0.7"
+tempfile = "3"
+thiserror = "2"
+tokio = { version = "1", features = ["rt"] }
+toml = "1"
+tui-realm-stdlib = "4"
+tui-term = "0.3"
+tuirealm = "4"
+unicode-width = "0.2"
+whoami = "2"
+wildmatch = "2"
+
+[target."cfg(any(target_os = \"linux\", target_os = \"freebsd\"))".dependencies]
+dbus-secret-service-keyring-store = { version = "1", features = [
+  "crypto-rust",
+  "vendored",
+] }
+
+[target."cfg(target_family = \"unix\")".dependencies]
+remotefs-ftp = { version = "0.4", features = [
+  "native-tls",
+  "native-tls-vendored",
+] }
+uzers = "0.12"
+
+[target."cfg(target_family = \"windows\")".dependencies]
+remotefs-ftp = { version = "0.4", features = ["native-tls"] }
+
+[target."cfg(target_os = \"macos\")".dependencies]
+apple-native-keyring-store = { version = "1", features = ["keychain"] }
+
+[target."cfg(target_os = \"windows\")".dependencies]
+windows-native-keyring-store = "1"
+
+[dev-dependencies]
+pretty_assertions = "1"
+serial_test = "3"
+
+[build-dependencies]
+cfg_aliases = "0.2"
+
+[[bin]]
+name = "easyscp"
+path = "src/main.rs"
+
+[lints.rust]
+trivial_numeric_casts = "warn"
+unsafe_op_in_unsafe_fn = "warn"
+unused_lifetimes = "warn"
+
+[lints.clippy]
+complexity = { level = "warn", priority = -1 }
+correctness = { level = "warn", priority = -1 }
+cloned_instead_of_copied = "warn"
+implicit_clone = "warn"
+manual_string_new = "warn"
+perf = { level = "warn", priority = -1 }
+redundant_closure_for_method_calls = "warn"
+style = { level = "warn", priority = -1 }
+suspicious = { level = "warn", priority = -1 }
+unnested_or_patterns = "warn"
+
+[profile.dev]
+incremental = true
+
+[profile.release]
+strip = true

@@ -1,0 +1,84 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import InstallTabs from "../components/InstallTabs.astro";
+import CopyButton from "../components/CopyButton.astro";
+import { DOCS_URL } from "../consts";
+
+const script =
+  "curl --proto '=https' --tlsv1.2 -sSLf https://raw.githubusercontent.com/paulo-amaral/easyscp/main/install.sh | sh";
+const psScript = "irm https://raw.githubusercontent.com/paulo-amaral/easyscp/main/install.ps1 | iex";
+
+const methods = [
+  { id: "cargo", label: "Cargo", cmd: "cargo install easyscp --locked" },
+  { id: "arch", label: "Arch Linux", cmd: "pacman -S easyscp" },
+  { id: "netbsd", label: "NetBSD", cmd: "pkgin install easyscp" },
+  { id: "choco", label: "Windows (Chocolatey)", cmd: "choco install easyscp" },
+];
+---
+
+<Base
+  title="Install EasySCP"
+  description="Install EasySCP on Linux, macOS, BSD and Windows with the official installer or a supported package manager."
+  path="/install"
+>
+  <Nav />
+  <main class="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
+    <h1 class="text-2xl font-bold text-text">Install EasySCP</h1>
+    <p class="mt-2 text-subtext">
+      Use the installer or the package manager for your platform.
+    </p>
+
+    <div class="mt-6 rounded-lg border border-line bg-mantle p-1">
+      <div
+        class="flex items-center gap-2 border-b border-line px-3 py-2 text-xs text-overlay"
+      >
+        <span class="text-green">$</span> Linux · macOS · BSD
+      </div>
+      <div class="relative">
+        <pre
+          class="m-0 overflow-auto bg-base px-4 py-4 pr-12 text-sm text-text"><code>{script}</code></pre>
+        <CopyButton text={script} class="absolute right-2 top-2" />
+      </div>
+    </div>
+    <p class="mt-2 text-xs text-overlay">
+      Requires <span class="text-text">curl</span>. macOS uses MacPorts if
+      available, otherwise Cargo builds from source.
+    </p>
+
+    <div class="mt-6 rounded-lg border border-line bg-mantle p-1">
+      <div
+        class="flex items-center gap-2 border-b border-line px-3 py-2 text-xs text-overlay"
+      >
+        <span class="text-green">&gt;</span> Windows (PowerShell)
+      </div>
+      <div class="relative">
+        <pre
+          class="m-0 overflow-auto bg-base px-4 py-4 pr-12 text-sm text-text"><code>{psScript}</code></pre>
+        <CopyButton text={psScript} class="absolute right-2 top-2" />
+      </div>
+    </div>
+    <p class="mt-2 text-xs text-overlay">
+      Downloads the latest release and adds <span class="text-text"
+        >easyscp</span
+      > to your user PATH.
+    </p>
+
+    <h2 class="mt-10 mb-3 text-lg text-text">Package managers</h2>
+    <InstallTabs methods={methods} />
+
+    <p class="mt-8 text-sm text-overlay">
+      Update with <span class="text-green">easyscp update</span>.
+    </p>
+    <p class="mt-2 text-sm text-overlay">
+      Linux build deps: <span class="text-text">libdbus-1</span>, <span
+        class="text-text">pkg-config</span
+      >, <span class="text-text">libsmbclient</span>. More details in the <a
+        href={DOCS_URL}
+        class="text-blue hover:underline">docs</a
+      >.
+    </p>
+  </main>
+  <Footer />
+</Base>

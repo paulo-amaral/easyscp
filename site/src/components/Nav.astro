@@ -1,0 +1,69 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import { DOCS_URL, GITHUB_URL } from "../consts";
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-line bg-mantle/90 backdrop-blur"
+>
+  <nav class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+    <a href="/" class="flex items-center gap-2 text-text">
+      <img src="/assets/images/easyscp.webp" alt="easyscp" class="h-7 w-7" />
+      <span class="font-bold">easyscp</span>
+    </a>
+
+    <!-- Desktop -->
+    <div class="hidden items-center gap-5 text-sm sm:flex">
+      <a
+        href="/install"
+        class="text-overlay hover:text-text"
+        data-umami-event="cta-install"
+        data-umami-event-location="nav">Install</a
+      >
+      <a
+        href={DOCS_URL}
+        class="text-overlay hover:text-text"
+        data-umami-event="docs"
+        data-umami-event-location="nav">User manual</a
+      >
+      <a
+        href={GITHUB_URL}
+        class="text-overlay hover:text-text"
+        data-umami-event="github"
+        data-umami-event-location="nav">GitHub</a
+      >
+      <ThemeToggle />
+    </div>
+
+    <!-- Mobile -->
+    <details class="relative sm:hidden">
+      <summary
+        class="cursor-pointer list-none rounded p-2 text-text hover:bg-mantle"
+        aria-label="Menu">☰</summary
+      >
+      <div
+        class="absolute right-0 mt-2 flex w-48 flex-col gap-3 rounded-lg border border-line bg-mantle p-4 text-sm shadow-xl"
+      >
+        <a
+          href="/install"
+          class="text-overlay hover:text-text"
+          data-umami-event="cta-install"
+          data-umami-event-location="nav-mobile">Install</a
+        >
+        <a
+          href={DOCS_URL}
+          class="text-overlay hover:text-text"
+          data-umami-event="docs"
+          data-umami-event-location="nav-mobile">User manual</a
+        >
+        <a
+          href={GITHUB_URL}
+          class="text-overlay hover:text-text"
+          data-umami-event="github"
+          data-umami-event-location="nav-mobile">GitHub</a
+        >
+        <ThemeToggle />
+      </div>
+    </details>
+  </nav>
+</header>

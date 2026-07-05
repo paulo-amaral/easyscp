@@ -1,0 +1,33 @@
+mod filelist;
+mod host;
+mod log;
+mod notify;
+
+use tuirealm::application::PollStrategy;
+
+use super::FileTransferActivity;
+
+impl FileTransferActivity {
+    /// Call `Application::tick()` and process messages in `Update`
+    pub(super) fn tick(&mut self) {
+        match self
+            .app
+            .tick(PollStrategy::UpTo(1, std::time::Duration::from_millis(10)))
+        {
+            Ok(messages) => {
+                if !messages.is_empty() {
+                    self.redraw = true;
+                }
+                for msg in messages.into_iter() {
+                    let mut msg = Some(msg);
+                    while msg.is_some() {
+                        msg = self.update(msg);
+                    }
+                }
+            }
+            Err(err) => {
+                self.mount_error(format!("Application error: {err}"));
+            }
+        }
+    }
+}

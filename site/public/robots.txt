@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://paulo-amaral.github.io/easyscp/sitemap-index.xml

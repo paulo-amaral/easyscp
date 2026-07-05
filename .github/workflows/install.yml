@@ -1,0 +1,32 @@
+name: Install.sh
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+
+env:
+  CARGO_TERM_COLOR: always
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+      - name: Install easyscp from script
+        run: |
+          ./install.sh -f
+          which easyscp || exit 1
+          easyscp --version

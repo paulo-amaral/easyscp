@@ -335,7 +335,7 @@ jobs:
 
   publish-choco:
     needs: [prepare, release]
-    if: ${{ !inputs.dry_run }}
+    if: ${{ !inputs.dry_run && secrets.CHOCO_API_KEY != '' }}
     runs-on: windows-latest
     env:
       VERSION: ${{ needs.prepare.outputs.version }}
